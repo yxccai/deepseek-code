@@ -30,7 +30,7 @@ const PACKAGE_ROOT = resolve(__dirname, '..')
 
 // ─── 路径检测 ────────────────────────────────────────────────────────────────
 
-const SRC_REPL = resolve(PACKAGE_ROOT, 'src', 'replLauncher.js')
+const SRC_REPL = resolve(PACKAGE_ROOT, 'src', 'replLauncher.ts')
 const BIN_DEEPCODE = resolve(__dirname, 'deepcode.js')
 const USER_CONFIG_DIR = join(homedir(), '.deepcode')
 const USER_CONFIG_PATH = join(USER_CONFIG_DIR, 'config.json')
@@ -41,23 +41,38 @@ function hasSourceFiles() {
   // Check relative to package (dev/npm)
   if (existsSync(SRC_REPL)) return true
   // Check current working directory (user cloned repo)
-  if (existsSync(resolve(process.cwd(), 'src', 'replLauncher.js'))) return true
+  if (existsSync(resolve(process.cwd(), 'src', 'replLauncher.ts')) ||
+      existsSync(resolve(process.cwd(), 'src', 'replLauncher.js'))) return true
   return false
 }
 
 function getPackageRoot() {
   if (existsSync(SRC_REPL)) return PACKAGE_ROOT
-  if (existsSync(resolve(process.cwd(), 'src', 'replLauncher.js'))) return process.cwd()
+  if (existsSync(resolve(process.cwd(), 'src', 'replLauncher.ts')) ||
+      existsSync(resolve(process.cwd(), 'src', 'replLauncher.js'))) return process.cwd()
   return null
 }
 
 function findBun() {
-  try {
-    const bunPath = execSync('where bun 2>nul || which bun 2>/dev/null', { encoding: 'utf-8' }).trim()
-    return bunPath || null
-  } catch {
-    return null
+  // Check common locations for Bun
+  const possiblePaths = [
+    join(homedir(), '.bun', 'bin', 'bun' + (process.platform === 'win32' ? '.exe' : '')),
+    join(homedir(), 'AppData', 'Roaming', 'npm', 'bun' + (process.platform === 'win32' ? '.cmd' : '')),
+    join(homedir(), 'AppData', 'Roaming', 'npm', 'bun' + (process.platform === 'win32' ? '.exe' : '')),
+    '/usr/local/bin/bun',
+    '/usr/bin/bun',
+  ]
+  for (const p of possiblePaths) {
+    if (existsSync(p)) return p
   }
+  // Try PATH lookup
+  try {
+    const isWin = process.platform === 'win32'
+    const cmd = isWin ? 'where bun' : 'which bun'
+    const result = execSync(cmd, { encoding: 'utf-8', shell: isWin ? 'cmd.exe' : true }).trim().split('\n')[0]
+    if (result) return result.trim()
+  } catch { /* not in PATH */ }
+  return null
 }
 
 // ─── 读取配置 ────────────────────────────────────────────────────────────────
@@ -147,16 +162,26 @@ function launchFullRepl(args) {
     process.exit(1)
   }
 
-  // Check for API key
+  // Check for API key — if missing, show interactive setup
   if (!process.env.DEEPSEEK_API_KEY && !getApiKey()) {
     console.log('')
-    console.log('❌ DEEPSEEK_API_KEY 未配置')
+    console.log('  ╔══════════════════════════════════════════╗')
+    console.log('  ║        DeepSeek Code 首次配置              ║')
+    console.log('  ║        需要设置 API Key 才能使用            ║')
+    console.log('  ╚══════════════════════════════════════════╝')
     console.log('')
-    console.log('请先配置 API Key:')
-    console.log('  方法1: set DEEPSEEK_API_KEY=sk-xxx')
-    console.log('  方法2: deepseek config --api-key sk-xxx')
+    console.log('  获取 API Key: https://platform.deepseek.com/api_keys')
     console.log('')
-    console.log('获取 Key: https://platform.deepseek.com/api_keys')
+    console.log('  快速配置（任选一种）:')
+    console.log('')
+    console.log('  [1] 设置环境变量（推荐，临时生效）')
+    console.log('    set DEEPSEEK_API_KEY=sk-xxx')
+    console.log('')
+    console.log('  [2] 保存到配置文件（永久生效）')
+    console.log('    deepseek config --api-key sk-xxx')
+    console.log('')
+    console.log('  [3] 验证配置')
+    console.log('    deepseek config --validate')
     console.log('')
     process.exit(1)
   }
@@ -342,30 +367,16 @@ async function cmdLearn() {
 }
 
 function cmdAnalyze() {
-  console.log('\n📊 Token 分析\n')
-  console.log('价格对比（每百万 Token）:')
-  console.log('  ┌──────────────────────┬──────────┬──────────┬────────┐')
-  console.log('  │ 项目                 │ Pro (¥)  │ Flash(¥) │ 节省   │')
-  console.log('  ├──────────────────────┼──────────┼──────────┼────────┤')
-  console.log('  │ 输入 (缓存命中)      │   1      │   0.2    │ 80%    │')
-  console.log('  │ 输入 (缓存未命中)    │  12      │   1      │ 92%    │')
-  console.log('  │ 输出                 │  12      │   1      │ 92%    │')
-  console.log('  └──────────────────────┴──────────┴──────────┴────────┘')
-  console.log('')
-  console.log('示例（10轮对话，50K输入+20K输出）:')
-  for (const [label, rate] of [['无缓存   (0%) ', 0], ['一般优化 (50%)', 0.5], ['深度优化 (95%)', 0.95]]) {
-    const hit = Math.floor(50000 * rate)
-    const cost = (hit / 1e6) * 0.2 + ((50000 - hit) / 1e6) * 1 + (20000 / 1e6) * 1
-    console.log('  ' + label + '  ¥' + cost.toFixed(4))
-  }
-  console.log('')
-  console.log('💡 缓存命中比未命中便宜 5 倍（Flash）~ 12 倍（Pro）')
-
   const config = readConfig()
-  if (config.cache?.enabled !== false) {
-    console.log('  当前缓存: ✅ 已启用')
-    console.log('  确保系统提示词 > 1024 tokens 以触发硬盘缓存')
-  }
+  console.log('\n📊 Token 使用分析\n')
+  console.log('当前模型: ' + (config.model || 'deepseek-v4-flash'))
+  console.log('缓存: ' + (config.cache?.enabled !== false ? '✅ 启用' : '❌ 禁用'))
+  console.log('')
+  console.log('💡 缓存优化建议:')
+  console.log('  • 将静态内容放在 prompt 最前面')
+  console.log('  • 确保前缀超过 1024 token')
+  console.log('  • 对齐到 128 token 边界')
+  console.log('  • 相同项目重复对话提高命中率')
   console.log('')
 }
 
