@@ -185,7 +185,7 @@ $ deepseek doctor
 curl -fsSL https://bun.sh/install | bash
 
 # 2. 克隆仓库
-git clone https://github.com/yourusername/deepseek-code.git
+git clone https://github.com/yxccai/deepseek-code.git
 cd deepseek-code
 
 # 3. 安装依赖
@@ -255,7 +255,7 @@ deepseek-code/
 
 ```bash
 # 克隆并开发
-git clone https://github.com/yourusername/deepseek-code.git
+git clone https://github.com/yxccai/deepseek-code.git
 cd deepseek-code
 bun install
 export DEEPSEEK_API_KEY=sk-xxx

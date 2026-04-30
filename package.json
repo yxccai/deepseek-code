@@ -34,12 +34,12 @@
   "author": "DeepSeek Code Contributors",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yourusername/deepseek-code.git"
+    "url": "git+https://github.com/yxccai/deepseek-code.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/deepseek-code/issues"
+    "url": "https://github.com/yxccai/deepseek-code/issues"
   },
-  "homepage": "https://github.com/yourusername/deepseek-code#readme",
+  "homepage": "https://github.com/yxccai/deepseek-code#readme",
   "engines": {
     "node": ">=18.0.0"
   },

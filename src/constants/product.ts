@@ -1,4 +1,4 @@
-export const PRODUCT_URL = 'https://github.com/yourusername/deepseek-code'
+export const PRODUCT_URL = 'https://github.com/yxccai/deepseek-code'
 
 // DeepSeek Code Remote session URLs (DeepSeek V4 optimized)
 export const CLAUDE_AI_BASE_URL = 'https://claude.ai'
