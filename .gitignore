@@ -1,0 +1,39 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build output
+dist/
+build/
+out/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+*.log
+
+# DeepSeek Code project files
+.deepcode/*.json
+
+# Cache
+.cache/
+
+# Coverage
+coverage/
+
+# Temp files
+*.tmp
+*.temp

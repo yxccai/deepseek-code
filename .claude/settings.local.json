@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node --check bin/deepseek-code.js)",
+      "Bash(node -e ' *)"
+    ]
+  }
+}

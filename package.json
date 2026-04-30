@@ -1,0 +1,63 @@
+{
+  "name": "deepseek-code",
+  "version": "1.0.0",
+  "description": "DeepSeek Code - 基于 DeepSeek V4 的 AI 编程助手。一行命令安装，各平台通用。npm install -g deepseek-code 即可使用",
+  "type": "module",
+  "bin": {
+    "deepseek": "./bin/deepseek-code.js",
+    "deepseek-code": "./bin/deepseek-code.js",
+    "dsc": "./bin/deepseek-code.js",
+    "deepcode": "./bin/deepseek-code.js"
+  },
+  "scripts": {
+    "start": "node bin/deepseek-code.js",
+    "dev": "node bin/deepseek-code.js",
+    "doctor": "node bin/deepseek-code.js doctor",
+    "config": "node bin/deepseek-code.js config",
+    "preheat": "node bin/deepseek-code.js preheat",
+    "prepublishOnly": "node bin/deepseek-code.js doctor",
+    "test": "node --check bin/deepseek-code.js"
+  },
+  "keywords": [
+    "deepseek",
+    "ai",
+    "coding",
+    "assistant",
+    "cli",
+    "deepseek-v4",
+    "code-editor",
+    "programming",
+    "chatbot",
+    "developer-tools"
+  ],
+  "license": "MIT",
+  "author": "DeepSeek Code Contributors",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yourusername/deepseek-code.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/deepseek-code/issues"
+  },
+  "homepage": "https://github.com/yourusername/deepseek-code#readme",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "files": [
+    "bin/",
+    "README.md",
+    "LICENSE",
+    "package.json"
+  ],
+  "dependencies": {
+    "glob": "^11.0.0"
+  },
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/yourusername"
+  }
+}
