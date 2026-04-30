@@ -56,20 +56,29 @@ function printBanner() {
 }
 
 const DEEPSEEK_WHALE = `
-    ▄███████████████████████
-  ▄███████████████████████████
- ██████████████████████████████
- ██████████████████████████████
-  ▀█████████████████████████████
-    ▀███████████████████████████
-      ▀▀▀███████████████████████
-            ▀▀▀▀████████████████
-                  ▀▀▀▀▀▀▀▀▀▀▀▀`
+         ╱│╲
+        ╱ │ ╲
+   ▄███████████████████████
+ ▄████████████████████████████
+ ██████ ● ████████████████████████
+ ███████████████████████████████
+  ▀████████████████████████████████    ▄▄
+    ▀██████████████████████████████  ▄▀▀▀
+      ▀▀██████████████████████████▄█
+           ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀`
+
+const _BLUE = '\x1b[38;2;79;107;237m'
+const _RESET = '\x1b[0m'
+const _EYE = '\x1b[97;48;2;79;107;237m' // white fg on blue bg
 
 function printWhaleBanner() {
-  console.log('\x1b[38;2;79;107;237m' + DEEPSEEK_WHALE + '\x1b[0m')
+  const BLUE = _BLUE
+  const RESET = _RESET
+  const EYE = _EYE
+  const whale = DEEPSEEK_WHALE.replace('●', EYE + '●' + BLUE)
+  console.log(BLUE + whale + RESET)
   console.log('')
-  console.log('  \x1b[1mDeepSeek Code\x1b[0m v' + VERSION + '  —  \x1b[38;2;79;107;237m基于 DeepSeek V4\x1b[0m')
+  console.log('  \x1b[1mDeepSeek Code\x1b[0m v' + VERSION + '  —  ' + BLUE + '基于 DeepSeek V4' + RESET)
   console.log('  ️输入 /help 查看命令，Ctrl+C 或 /exit 退出')
   console.log('')
 }
