@@ -1,7 +1,7 @@
 {
   "name": "@yxccai/deepseek-code",
-  "version": "1.0.0",
-  "description": "DeepSeek Code - 基于 DeepSeek V4 的 AI 编程助手。一行命令安装，各平台通用。npm install -g deepseek-code 即可使用",
+  "version": "1.0.1",
+  "description": "DeepSeek Code - 基于 DeepSeek V4 的 AI 编程助手，保留 Claude Code 全部功能。一行命令安装，各平台通用",
   "type": "module",
   "bin": {
     "deepseek": "./bin/deepseek-code.js",
