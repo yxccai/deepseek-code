@@ -15,7 +15,7 @@
     "doctor": "node bin/deepseek-code.js doctor",
     "config": "node bin/deepseek-code.js config",
     "preheat": "node bin/deepseek-code.js preheat",
-    "prepublishOnly": "node bin/deepseek-code.js doctor",
+    "prepublishOnly": "node --check bin/deepseek-code.js",
     "test": "node --check bin/deepseek-code.js"
   },
   "keywords": [
